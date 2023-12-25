@@ -1,16 +1,14 @@
-import os
 import glob
-from typing import Optional
+import os
 
 import numpy as np
 
-
 CURR_WORDS: list[str] = None
 
-CURR_RESPONSE: Optional[str] = None
-LAST_WORD: Optional[str] = None
-CURR_WORD: Optional[str] = None
-NEXT_WORD: Optional[str] = None
+CURR_RESPONSE: str | None = None
+LAST_WORD: str | None = None
+CURR_WORD: str | None = None
+NEXT_WORD: str | None = None
 
 TEXT_COLOR: str = "#EAECEE"
 BG_COLOR: str = "#18181B"
@@ -40,12 +38,16 @@ def backtrack () -> None:
     global CURR_WORD
     global NEXT_WORD
 
-    CURR_RESPONSE = "v"
-    NEXT_WORD = CURR_WORD
-    CURR_WORD = LAST_WORD
-    LAST_WORD = None
+    if LAST_WORD is not None:
+        CURR_RESPONSE = "v"
+        NEXT_WORD = CURR_WORD
+        CURR_WORD = LAST_WORD
+        LAST_WORD = None
 
-    CURR_WORDS.insert(NEXT_WORD)
+        CURR_WORDS.append(CURR_WORD)
+
+    else:
+        CURR_RESPONSE = "x"
 
 def get_curr_word () -> None:
     global CURR_WORDS
@@ -76,7 +78,6 @@ def next_word (action: str) -> None:
     else:
         CURR_WORD = None
 
-# flake8: noqa: S605
 if __name__ == "__main__":
     for f in glob.glob("palavras/*.txt"):
         os.remove(f)
